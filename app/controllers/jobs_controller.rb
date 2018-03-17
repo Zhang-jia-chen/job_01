@@ -5,6 +5,10 @@ class JobsController < ApplicationController
   end
   def show
     @job = Job.find(params[:id])
+    if @job.is_hidden
+      flash[:warning] = "This Job already archived"
+      redirect_to root_path
+    end
   end
   def new
     @job = Job.new
@@ -12,7 +16,6 @@ class JobsController < ApplicationController
   end
   def create
     @job = Job.new(params_job)
-
     if @job.save
       redirect_to jobs_path
     else
